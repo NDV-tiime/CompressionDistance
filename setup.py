@@ -21,12 +21,9 @@ setup(
         "unidecode",
         "pydivsufsort",
         "Levenshtein",
+        "pytest",
     ],
     extras_require={
-        "dev": [
-            "pytest",
-            "pytest-cov",
-        ],
         "experiments": [
             "evaluate",
             "datasets",

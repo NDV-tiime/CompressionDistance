@@ -8,9 +8,6 @@ A compression-based edit distance metric for comparing texts, as described in [A
 # Basic installation
 pip install compression-distance
 
-# With development tools
-pip install compression-distance[dev]
-
 # With experiment dependencies
 pip install compression-distance[experiments]
 ```
