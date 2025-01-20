@@ -1,5 +1,6 @@
 from compression_distance import compression_distance
 
+
 def test_compression_distance():
     r = "vwxyz"
     q = "zyxwv"

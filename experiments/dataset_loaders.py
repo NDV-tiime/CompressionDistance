@@ -12,7 +12,7 @@ def load_accounting_edits_dataset() -> pd.DataFrame:
     Load the qa accounting edits dataset from HuggingFace and return a DataFrame with two LLM answer columns:
     - llm_answer_with_knowledge: LLM answer + gold answer
     - llm_answer_without_knowledge: LLM answer only
-    
+
     Returns:
         pd.DataFrame: DataFrame containing the dataset with the following columns:
             - edit_text: human edited text
@@ -21,27 +21,27 @@ def load_accounting_edits_dataset() -> pd.DataFrame:
             - edit_time: time taken for the edit
     """
     human_edits = load_dataset("Tiime/fr-qa-accounting-edits", name="human_edits")
-    df = human_edits['human_edits'].to_pandas()
+    df = human_edits["human_edits"].to_pandas()
     df["llm_answer_with_knowledge"] = df["llm_answer"] + " " + df["gold_answer"]
     df["llm_answer_without_knowledge"] = df["llm_answer"]
     df.rename(columns={"llm_answer_edit": "edit_text"}, inplace=True)
-    
+
     return df
 
 
 def clean_text(text: str) -> str:
-    return re.sub(r'[^\x20-\x7E]', '', text)
+    return re.sub(r"[^\x20-\x7E]", "", text)
 
 
 def load_iwslt_dataset(data_directory: str) -> Dict[str, pd.DataFrame]:
     """
     Load IWSLT2019 data from local files and return a dictionary of DataFrames.
-    
+
     Args:
         data_directory (str): Path to the directory containing IWSLT2019 files
-        
+
     Returns:
-        Dict[str, pd.DataFrame]: Dictionary with annotator names as keys and their 
+        Dict[str, pd.DataFrame]: Dictionary with annotator names as keys and their
                                corresponding DataFrames as values
     """
     header_path = os.path.join(data_directory, "header")
@@ -56,7 +56,7 @@ def load_iwslt_dataset(data_directory: str) -> Dict[str, pd.DataFrame]:
     for f_name in data_files:
         full_path = os.path.join(data_directory, f_name)
         rows = []
-        
+
         # Read and process file line by line
         with open(full_path, "r", encoding="utf-8") as f_in:
             lines = f_in.readlines()
@@ -82,15 +82,14 @@ def load_iwslt_dataset(data_directory: str) -> Dict[str, pd.DataFrame]:
         df = pd.DataFrame(rows)
         df["edit_text"] = df["<PE>"]
         df["llm_answer"] = df["<MT>"]
-        df.rename(columns={
-            "<time>": "time",
-            "<keystrokes>": "keystrokes"
-        }, inplace=True)
-        
+        df.rename(
+            columns={"<time>": "time", "<keystrokes>": "keystrokes"}, inplace=True
+        )
+
         # Clean up DataFrame
         df.dropna(subset=["edit_text", "llm_answer", "time"], inplace=True)
         df.reset_index(drop=True, inplace=True)
-        
+
         annotator_data[f_name] = df
 
     return annotator_data

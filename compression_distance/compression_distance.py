@@ -9,6 +9,7 @@ def LZ77(s: str) -> int:
     lpf = longest_previous_factor(s)
     return len(lempel_ziv_factorization(lpf)) - 1
 
+
 def compression_distance(source: str, target: str) -> int:
     """
     Implements the internal compression distance c_int from
